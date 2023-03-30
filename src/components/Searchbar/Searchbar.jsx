@@ -12,11 +12,10 @@ export class Searchbar extends Component {
   };
 
   handleSubmit = event => {
-    event.PreventDefault();
+    event.preventDefault();
 
     if (this.state.imageName.trim() === '') {
-      toast.warn('Please enter a request!');
-      return;
+      return toast.warn('Please enter a request!');
     }
 
     this.props.onSubmit(this.state.imageName);
@@ -44,3 +43,5 @@ export class Searchbar extends Component {
     );
   }
 }
+
+export default Searchbar;
