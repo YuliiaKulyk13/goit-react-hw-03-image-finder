@@ -23,7 +23,7 @@ export class App extends Component {
     });
   };
 
-  async componentDidUpdate(prevState) {
+  async componentDidUpdate( _, prevState) {
     const prevName = prevState.imageName;
     const nextName = this.state.imageName;
     const prevPage = prevState.page;
