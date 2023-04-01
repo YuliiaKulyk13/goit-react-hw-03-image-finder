@@ -4,6 +4,10 @@ import { Component } from 'react';
 import { Searchbar } from './Searchbar/Searchbar';
 import { fetchImagesGallery } from './API/api';
 import { Loader } from './Loader/Loader';
+import { ImageGallery } from './ImageGallery/ImageGallery';
+import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
+import { LoadMoreBtn } from './Button/Button';
+import Modal from './Modal/Modal';
 
 export class App extends Component {
   state = {
@@ -13,6 +17,7 @@ export class App extends Component {
     page: 1,
     totalImages: 0,
     error: null,
+    showModal: false,
   };
 
   handleSearchBarSubmit = imageName => {
@@ -23,16 +28,15 @@ export class App extends Component {
     });
   };
 
-  async componentDidUpdate( _, prevState) {
+  async componentDidUpdate(_, prevState) {
     const prevName = prevState.imageName;
     const nextName = this.state.imageName;
-    const prevPage = prevState.page;
-    const nextPage = this.state.page;
 
-    if (prevName !== nextName || prevPage !== nextPage) {
+    if (prevName !== nextName) {
       this.setState({ loading: true });
       try {
-        const response = await fetchImagesGallery(nextName, nextPage);
+        const response = await fetchImagesGallery(nextName);
+        console.log(response);
 
         if (response.status !== 200 || response.data.hits.length === 0) {
           return toast.error('Something went wrong. Please try again!');
@@ -40,9 +44,9 @@ export class App extends Component {
         this.setState({
           totalImages: response.data.totalHits,
         });
-        this.setState(prevState => ({
-          images: [...prevState.images, ...response.data.hits],
-        }));
+        // this.setState(prevState => ({
+        //   images: [...prevState.images, ...response.data.hits],
+        // }));
       } catch (error) {
         return toast.error(
           'Sorry, there are no images matching your request. Please try again.'
@@ -52,14 +56,30 @@ export class App extends Component {
       }
     }
   }
+  handleIncrementPage = () => {
+    this.setState(prevState => ({
+      value: prevState.value + 1,
+    }));
+  };
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
 
   render() {
-    const { loading } = this.state;
+    const { loading, showModal } = this.state;
     return (
       <div style={{ maxWidth: 1170, margin: '0 auto', padding: 20 }}>
+        {showModal && <Modal onClose={this.toggleModal} />}
+
         <Searchbar onSubmit={this.handleSearchBarSubmit} />
+        <ImageGallery />
+        <ImageGalleryItem />
         <ToastContainer autoClose={3000} />
         {loading && <Loader />}
+        <LoadMoreBtn onClick={this.handleIncrementPage} />
       </div>
     );
   }
