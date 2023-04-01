@@ -5,7 +5,6 @@ import { Searchbar } from './Searchbar/Searchbar';
 import { fetchImagesGallery } from './API/api';
 import { Loader } from './Loader/Loader';
 import { ImageGallery } from './ImageGallery/ImageGallery';
-import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
 import { LoadMoreBtn } from './Button/Button';
 import Modal from './Modal/Modal';
 
@@ -18,6 +17,7 @@ export class App extends Component {
     totalImages: 0,
     error: null,
     showModal: false,
+    modalImage: '',
   };
 
   handleSearchBarSubmit = imageName => {
@@ -32,11 +32,10 @@ export class App extends Component {
     const prevName = prevState.imageName;
     const nextName = this.state.imageName;
 
-    if (prevName !== nextName) {
+    if (prevName !== nextName || prevState.page !== this.state.page) {
       this.setState({ loading: true });
       try {
-        const response = await fetchImagesGallery(nextName);
-        console.log(response);
+        const response = await fetchImagesGallery(nextName, this.state.page);
 
         if (response.status !== 200 || response.data.hits.length === 0) {
           return toast.error('Something went wrong. Please try again!');
@@ -44,9 +43,11 @@ export class App extends Component {
         this.setState({
           totalImages: response.data.totalHits,
         });
-        // this.setState(prevState => ({
-        //   images: [...prevState.images, ...response.data.hits],
-        // }));
+        this.setState(prevState => {
+          return {
+            images: [...prevState.images, ...response.data.hits],
+          };
+        });
       } catch (error) {
         return toast.error(
           'Sorry, there are no images matching your request. Please try again.'
@@ -58,7 +59,7 @@ export class App extends Component {
   }
   handleIncrementPage = () => {
     this.setState(prevState => ({
-      value: prevState.value + 1,
+      page: prevState.page + 1,
     }));
   };
 
@@ -68,15 +69,23 @@ export class App extends Component {
     }));
   };
 
+  imageClick = imageUrl => {
+    this.setState({ modalImage: imageUrl, showModal: true });
+  };
+
   render() {
-    const { loading, showModal } = this.state;
+    const { loading, showModal, images } = this.state;
+    console.log(loading);
     return (
       <div style={{ maxWidth: 1170, margin: '0 auto', padding: 20 }}>
-        {showModal && <Modal onClose={this.toggleModal} />}
+        {showModal && (
+          <Modal image={this.state.modalImage} onClose={this.toggleModal} />
+        )}
 
         <Searchbar onSubmit={this.handleSearchBarSubmit} />
-        <ImageGallery />
-        <ImageGalleryItem />
+        {images.length && (
+          <ImageGallery items={images} onClick={this.imageClick} />
+        )}
         <ToastContainer autoClose={3000} />
         {loading && <Loader />}
         <LoadMoreBtn onClick={this.handleIncrementPage} />

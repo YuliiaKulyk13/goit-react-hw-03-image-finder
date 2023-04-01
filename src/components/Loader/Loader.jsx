@@ -1,6 +1,6 @@
 import { Puff } from 'react-loader-spinner';
 
-export const Loader = () => {
+export const Loader = () => (
   <Puff
     height="80"
     width="80"
@@ -10,5 +10,5 @@ export const Loader = () => {
     wrapperStyle={{}}
     wrapperClass=""
     visible={true}
-  />;
-};
+  />
+);
