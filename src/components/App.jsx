@@ -75,14 +75,13 @@ export class App extends Component {
   };
 
   render() {
-    const { loading, showModal, images } = this.state;
-    const showButton = images.length >= 12;
+    const { loading, showModal, images, page, modalImage } = this.state;
+    const maxPage = Math.ceil(this.state.totalImages / 12);
+    const showButton = images.length >= 12 && page < maxPage;
     return (
       <Container>
         <Searchbar onSubmit={this.handleSearchBarSubmit} />
-        {showModal && (
-          <Modal image={this.state.modalImage} onClose={this.toggleModal} />
-        )}
+        {showModal && <Modal image={modalImage} onClose={this.toggleModal} />}
 
         {images.length && (
           <ImageGallery items={images} onClick={this.imageClick} />
