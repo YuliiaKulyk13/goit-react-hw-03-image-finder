@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { ModalBackdrop, ModalContent } from './Modal.styled';
 
 export default class Modal extends Component {
   componentDidMount() {
@@ -23,11 +24,11 @@ export default class Modal extends Component {
 
   render() {
     return (
-      <div className="modal__backdrop" onClick={this.handleClick}>
-        <div className="modal__content">
+      <ModalBackdrop onClick={this.handleClick}>
+        <ModalContent>
           <img src={this.props.image} />
-        </div>
-      </div>
+        </ModalContent>
+      </ModalBackdrop>
     );
   }
 }

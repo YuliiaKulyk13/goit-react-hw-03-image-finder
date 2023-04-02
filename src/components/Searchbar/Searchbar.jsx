@@ -1,6 +1,13 @@
 import { FcSearch } from 'react-icons/fc';
 import { toast } from 'react-toastify';
 import { Component } from 'react';
+import {
+  Button,
+  ButtonSearch,
+  Form,
+  Header,
+  InputSearch,
+} from './Searchbar.styled';
 
 export class Searchbar extends Component {
   state = {
@@ -24,22 +31,22 @@ export class Searchbar extends Component {
 
   render() {
     return (
-      <header>
-        <form onSubmit={this.handleSubmit}>
-          <button type="submit">
-            <FcSearch size="10" />
-            <span>Search</span>
-          </button>
+      <Header>
+        <Form onSubmit={this.handleSubmit}>
+          <Button type="submit">
+            <FcSearch size="30" />
+            <ButtonSearch>Search</ButtonSearch>
+          </Button>
 
-          <input
+          <InputSearch
             type="text"
             name="imageName"
             value={this.state.imageName}
             onChange={this.handleNameChange}
             placeholder="Search images and photos"
           />
-        </form>
-      </header>
+        </Form>
+      </Header>
     );
   }
 }

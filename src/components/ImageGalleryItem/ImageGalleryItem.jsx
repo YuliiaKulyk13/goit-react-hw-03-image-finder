@@ -1,3 +1,5 @@
+import { ImageItem } from './ImageGalleryItem.styled';
+
 export const ImageGalleryItem = ({ webformatURL, tags }) => {
-  return <img src={webformatURL} alt={tags} />;
+  return <ImageItem src={webformatURL} alt={tags} />;
 };

@@ -7,6 +7,7 @@ import { Loader } from './Loader/Loader';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { LoadMoreBtn } from './Button/Button';
 import Modal from './Modal/Modal';
+import { Container } from './App.styled';
 
 export class App extends Component {
   state = {
@@ -75,21 +76,21 @@ export class App extends Component {
 
   render() {
     const { loading, showModal, images } = this.state;
-    console.log(loading);
+    const showButton = images.length >= 12;
     return (
-      <div style={{ maxWidth: 1170, margin: '0 auto', padding: 20 }}>
+      <Container>
+        <Searchbar onSubmit={this.handleSearchBarSubmit} />
         {showModal && (
           <Modal image={this.state.modalImage} onClose={this.toggleModal} />
         )}
 
-        <Searchbar onSubmit={this.handleSearchBarSubmit} />
         {images.length && (
           <ImageGallery items={images} onClick={this.imageClick} />
         )}
         <ToastContainer autoClose={3000} />
         {loading && <Loader />}
-        <LoadMoreBtn onClick={this.handleIncrementPage} />
-      </div>
+        {showButton && <LoadMoreBtn onClick={this.handleIncrementPage} />}
+      </Container>
     );
   }
 }
