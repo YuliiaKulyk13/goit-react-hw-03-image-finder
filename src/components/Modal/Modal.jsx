@@ -26,7 +26,7 @@ export default class Modal extends Component {
     return (
       <ModalBackdrop onClick={this.handleClick}>
         <ModalContent>
-          <img src={this.props.image} />
+          <img src={this.props.image} alt="" />
         </ModalContent>
       </ModalBackdrop>
     );
