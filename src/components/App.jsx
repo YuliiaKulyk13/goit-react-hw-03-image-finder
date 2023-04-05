@@ -83,9 +83,7 @@ export class App extends Component {
         <Searchbar onSubmit={this.handleSearchBarSubmit} />
         {showModal && <Modal image={modalImage} onClose={this.toggleModal} />}
 
-        {images.length && (
-          <ImageGallery items={images} onClick={this.imageClick} />
-        )}
+        {images && <ImageGallery items={images} onClick={this.imageClick} />}
         <ToastContainer autoClose={3000} />
         {loading && <Loader />}
         {showButton && <LoadMoreBtn onClick={this.handleIncrementPage} />}
